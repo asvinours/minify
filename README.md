@@ -17,7 +17,6 @@ Optional arguments:
 Dependencies
 ============
 
-Before using this script please verify that you have installed uglify-js
-https://github.com/mishoo/UglifyJS
-Before using this script please verify that you have installed uglifycss
-https://github.com/fmarcia/UglifyCSS
++ NodeJS
++ Uglify-js: https://github.com/mishoo/UglifyJS
++ Uglifycss: https://github.com/fmarcia/UglifyCSS
