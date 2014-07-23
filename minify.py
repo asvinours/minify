@@ -1,4 +1,4 @@
-#! /usr/bin/python2.7
+#! /usr/bin/python
 # -*- coding: utf-8 -*-
 
 #############
@@ -61,7 +61,7 @@ def diff(a, b):
 
 
 def compressCss(f):
-    if not fnmatch.fnmatch(f, '*.uglify') and fnmatch.fnmatch(f, '*.css') and not fnmatch.fnmatch(f, excludedCSSPattern) and f not in excludedCSSFiles:
+    if not fnmatch.fnmatch(f, '*.uglify') and fnmatch.fnmatch(f, '*.css') and not fnmatch.fnmatch(f, excludedPattern) and f not in excludedFiles:
         fullPath = os.path.join(root, f)
         fullPathUg = os.path.join(root, f+".uglify")
         print fullPath+" will be compressed"
@@ -107,13 +107,16 @@ def compressJs(f):
 
 
 # we check if the cache key is passed as an argument
-parser = argparse.ArgumentParser(description='Compress JS files of a specific folder', prog='CompressJs')
+parser = argparse.ArgumentParser(description='Compress JS files of a specific folder', prog='minify.py')
 parser.add_argument('--cacheKey', '-c', dest='cachekey', action='store', default=False, help='Used to create the filename with the cache key')
 parser.add_argument('--folder', '-f', dest='folder', action='store', help='The folder where the files are')
 parser.add_argument('--type', '-t', dest='type', choices=['css', 'js'], action='store', help='The type of files to compress (css, js)')
 parser.add_argument('--auto', '-a', dest='auto', action="store_true", help='Let the script check the type of file')
 
 args = parser.parse_args()
+
+if not (args.folder):
+        parser.error('No folder specified. Please add a folder with --folder')
 
 # we create the real path of the folder
 if os.path.isabs(args.folder):
@@ -123,7 +126,7 @@ else:
 print folder
 
 # for each file in each folder of the specified root
-for root, dirs, files in os.walk(jsFolder):
+for root, dirs, files in os.walk(folder):
 
     # We retrieve the full size of the folder
     fullSize = sum(getsize(join(root, name)) for name in files)
@@ -134,7 +137,7 @@ for root, dirs, files in os.walk(jsFolder):
     # for each file in this folder
     for f in files:
         if(args.auto):
-            fileName, fileExtension = os.path.splitext('/path/to/somefile.ext')
+            fileName, fileExtension = os.path.splitext(f)
             if(fileExtension == '.css'):
                 compressCss(f)
             elif(fileExtension == '.js'):
